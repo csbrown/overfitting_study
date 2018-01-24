@@ -99,3 +99,20 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# this project specifically
+/data
+/models
