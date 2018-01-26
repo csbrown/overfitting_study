@@ -40,7 +40,7 @@ class Cifar10ShallowConvolutionalModel(TrainableMixin):
                 self.h_conv1 = tf.nn.relu(conv2d(self.x_image, self.W_conv1) + self.b_conv1, name="relu")
                 self.h_pool1 = max_pool_2x2(self.h_conv1, name="max_pool")
 
-                self.weight_decay_layer_1 = tf.Variable(0,trainable=False,name="weight_decay_rate")
+                self.weight_decay_layer_1 = tf.Variable(0.,trainable=False,name="weight_decay_rate")
                 self.layer_1_loss = tf.multiply(tf.nn.l2_loss(self.W_conv1), self.weight_decay_layer_1, name="weight_loss")
 
                 layer_1_out_dim = [int(layer_1_in_dim[0]/2), int(layer_1_in_dim[1]/2), 32]
@@ -52,7 +52,7 @@ class Cifar10ShallowConvolutionalModel(TrainableMixin):
                 self.h_conv2 = tf.nn.relu(conv2d(self.h_pool1, self.W_conv2) + self.b_conv2, name="relu")
                 self.h_pool2 = max_pool_2x2(self.h_conv2, name="max_pool")
 
-                self.weight_decay_layer_2 = tf.Variable(0,trainable=False,name="weight_decay_rate")
+                self.weight_decay_layer_2 = tf.Variable(0.,trainable=False,name="weight_decay_rate")
                 self.layer_2_loss = tf.multiply(tf.nn.l2_loss(self.W_conv2), self.weight_decay_layer_2, name="weight_loss")
 
                 layer_2_out_dim = [int(layer_2_in_dim[0]/2), int(layer_2_in_dim[1]/2), 64]
@@ -64,7 +64,7 @@ class Cifar10ShallowConvolutionalModel(TrainableMixin):
                 self.h_conv3 = tf.nn.relu(conv2d(self.h_pool2, self.W_conv3) + self.b_conv3, name="relu")
                 self.h_pool3 = max_pool_2x2(self.h_conv3, name="max_pool")
 
-                self.weight_decay_layer_3 = tf.Variable(0,trainable=False,name="weight_decay_rate")
+                self.weight_decay_layer_3 = tf.Variable(0.,trainable=False,name="weight_decay_rate")
                 self.layer_3_loss = tf.multiply(tf.nn.l2_loss(self.W_conv2), self.weight_decay_layer_3, name="weight_loss")
 
                 layer_3_out_dim = [int(layer_3_in_dim[0]/2), int(layer_3_in_dim[1]/2), 128]
