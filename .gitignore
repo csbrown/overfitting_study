@@ -116,3 +116,7 @@ ENV/
 # this project specifically
 /data
 /models
+/paper
+/references
+/tensorflow_models
+/notes
