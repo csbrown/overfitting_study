@@ -2,13 +2,26 @@ import time
 import numpy as np
 import tensorflow as tf
 import sys
-
-tf.logging.set_verbosity(tf.logging.ERROR)
+import os
 
 ROOT = "../models/{}"
 CHECKPOINT = "{}/model.ckpt".format(ROOT)
 STATS = "{}_stats".format(ROOT)
 TABLEWIDTH = 16
+
+def make_dirs(name): 
+    try:
+        os.makedirs(name)
+    except FileExistsError:
+        pass
+
+def load_checkpoints(name):
+    try:
+        checkpoints = sorted(["{}/{}".format(ROOT.format(name),x[:-5]) for x in os.listdir(ROOT.format(name)) if x.endswith(".meta")], 
+                     key=lambda x: int(x.split("-")[-1]))
+    except FileNotFoundError:
+        checkpoints = []
+    return checkpoints
 
 class Timer(object):
     def start(self):
