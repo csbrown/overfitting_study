@@ -102,8 +102,7 @@ class Cifar100Record(object):
             tf.strided_slice(record, [0], [1]), tf.int32)
         fine_label = tf.cast(
             tf.strided_slice(record, [1], [2]), tf.int32)
-        label = coarse_label + (tf.uint8.max + 1)*fine_label
-        label = tf.one_hot(label, 100, on_value=1.0, off_value=0.0)
+        label = tf.one_hot(fine_label, 100, on_value=1.0, off_value=0.0)
         label = tf.reshape(label,[100])
 
         # The remaining bytes after the label represent the image, which we reshape
@@ -130,4 +129,4 @@ class Cifar100Record(object):
     @staticmethod
     def _standardize(image, label):
         image = tf.image.per_image_standardization(image)
-        return image, label 
+        return image, label
