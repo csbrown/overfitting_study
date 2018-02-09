@@ -89,9 +89,8 @@ class Cifar10ShallowConvolutionalModel(TrainableMixin):
 
             with tf.name_scope("outputs"):
                 self.proba = tf.nn.softmax(self.logits, name="proba")
-                self.weight_decay_layer_2 = tf.Variable(0,trainable=False)
-                self.weight_decay_layer_3 = tf.Variable(0,trainable=False)
                 self.cross_entropy_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.logits), name="cross_entropy_loss")
+                self.loss = tf.add_n((self.cross_entropy_loss, self.layer_1_loss, self.layer_2_loss, self.layer_3_loss))
                 
       
             with tf.name_scope("summaries"):

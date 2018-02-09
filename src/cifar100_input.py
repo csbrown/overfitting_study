@@ -40,10 +40,27 @@ def maybe_download_and_extract():
         print("Done.")
         os.rename(main_directory+"cifar-100-binary", data_directory)
         os.remove(zip_data)
+    train_data = split_data(os.path.join(data_directory, 'train.bin'),10000)
     return (
-        [os.path.join(data_directory, 'train.bin')],
+        train_data[:-1],
+        train_data[-1:],
         [os.path.join(data_directory, 'test.bin')]
     )
+
+def split_data(filename, size, suffix=""):
+    files = []
+    with open(filename,'rb') as orig_data_file:
+        data = orig_data_file.read(Cifar100Record.record_bytes)
+        j = 0
+        while data:
+            files.append(filename+suffix+str(j).rjust(3,"0"))
+            with open(files[-1],'wb') as new_data_file:
+                for i in range(size):
+                    new_data_file.write(data)
+                    data = orig_data_file.read(Cifar100Record.record_bytes)
+            j+=1
+    return files
+    
 
 class Cifar100Record(object):
     # This class represents a Cifar100 thing that we read from the Cifar100 files.
@@ -85,8 +102,7 @@ class Cifar100Record(object):
             tf.strided_slice(record, [0], [1]), tf.int32)
         fine_label = tf.cast(
             tf.strided_slice(record, [1], [2]), tf.int32)
-        label = coarse_label + (tf.uint8.max + 1)*fine_label
-        label = tf.one_hot(label, 100, on_value=1.0, off_value=0.0)
+        label = tf.one_hot(fine_label, 100, on_value=1.0, off_value=0.0)
         label = tf.reshape(label,[100])
 
         # The remaining bytes after the label represent the image, which we reshape
@@ -113,4 +129,4 @@ class Cifar100Record(object):
     @staticmethod
     def _standardize(image, label):
         image = tf.image.per_image_standardization(image)
-        return image, label 
+        return image, label
