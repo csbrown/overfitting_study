@@ -18,10 +18,14 @@ def make_dirs(name):
 def load_checkpoints(name):
     try:
         checkpoints = sorted(["{}/{}".format(ROOT.format(name),x[:-5]) for x in os.listdir(ROOT.format(name)) if x.endswith(".meta")], 
-                     key=lambda x: int(x.split("-")[-1]))
+                     key=lambda x: int(x.split("_")[-1]))
     except FileNotFoundError:
         checkpoints = []
     return checkpoints
+
+def latest_checkpoint(name):
+    checkpoints = load_checkpoints(name)
+    return None if not checkpoints else checkpoints[-1]
 
 class Timer(object):
     def start(self):
